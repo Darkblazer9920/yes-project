@@ -1,0 +1,39 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-8.3.4, pluggy-1.7.0 -- C:\Users\EQUIPO\AppData\Local\Programs\Python\Python313\python.exe
+rootdir: yes-project
+plugins: anyio-4.16.0
+collecting ... collected 28 items
+
+tests/test_crud.py::test_catalog_crud_cycle[organizations] PASSED
+tests/test_crud.py::test_catalog_crud_cycle[users] PASSED
+tests/test_crud.py::test_catalog_crud_cycle[venues] PASSED
+tests/test_crud.py::test_catalog_crud_cycle[equipment] PASSED
+tests/test_crud.py::test_not_found_returns_404 PASSED
+tests/test_crud.py::test_unique_organization_name PASSED
+tests/test_crud.py::test_invalid_values_rejected PASSED
+tests/test_crud.py::test_user_with_missing_organization_is_rejected PASSED
+tests/test_crud.py::test_proposal_crud_and_equipment PASSED
+tests/test_crud.py::test_proposal_creation_is_atomic PASSED
+tests/test_crud.py::test_reservation_requires_approved_proposal PASSED
+tests/test_crud.py::test_reservation_crud PASSED
+tests/test_crud.py::test_end_before_start_rejected PASSED
+tests/test_crud.py::test_cancel_frees_the_venue PASSED
+tests/test_crud.py::test_club_activity_report PASSED
+tests/test_spec_cases.py::test_tc01_prevent_double_booking_same_venue PASSED
+tests/test_spec_cases.py::test_tc01_trigger_blocks_direct_sql_insert PASSED
+tests/test_spec_cases.py::test_tc01_back_to_back_bookings_are_allowed PASSED
+tests/test_spec_cases.py::test_tc02_draft_cannot_jump_to_approved PASSED
+tests/test_spec_cases.py::test_tc02_approval_without_log_is_blocked_in_database PASSED
+tests/test_spec_cases.py::test_tc02_full_lifecycle_records_logs PASSED
+tests/test_spec_cases.py::test_tc02_leader_cannot_approve PASSED
+tests/test_spec_cases.py::test_tc03_audience_overlap_warning PASSED
+tests/test_spec_cases.py::test_tc03_no_warning_for_different_audience PASSED
+tests/test_spec_cases.py::test_tc04_delete_organization_with_proposals_is_blocked PASSED
+tests/test_spec_cases.py::test_tc04_foreign_keys_enabled_at_sql_level PASSED
+tests/test_spec_cases.py::test_tc05_occupancy_query_performance 
+TC-05 occupancy SQL over 500 reservations: best 1.20 ms, worst 3.40 ms
+PASSED
+tests/test_spec_cases.py::test_tc05_reservation_lookup_uses_index PASSED
+
+- generated xml file: yes-project\docs\build\junit.xml -
+============================= 28 passed in 7.81s ==============================

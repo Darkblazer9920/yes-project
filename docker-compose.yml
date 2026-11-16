@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    container_name: yes-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - yes-data:/data
+
+volumes:
+  yes-data:

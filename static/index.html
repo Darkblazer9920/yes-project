@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yachay Events System</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo">YES</span> Yachay Events System</div>
+  <nav id="tabs">
+    <button data-tab="dashboard" class="active">Dashboard</button>
+    <button data-tab="proposals">Event proposals</button>
+    <button data-tab="reservations">Reservations</button>
+    <button data-tab="venues">Venues</button>
+    <button data-tab="organizations">Organizations</button>
+  </nav>
+</header>
+
+<main>
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- DASHBOARD -->
+  <section id="tab-dashboard" class="tab">
+    <h1>Dashboard</h1>
+    <div class="stats" id="stats"></div>
+    <div class="card">
+      <h2>Audience overlap warnings <small>(FR-04)</small></h2>
+      <p class="muted">Approved events that target the same major at the same time.</p>
+      <table id="overlaps-table"><thead><tr>
+        <th>Audience</th><th>Event A</th><th>Event B</th><th>When</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="card">
+      <h2>Upcoming reservations</h2>
+      <table id="upcoming-table"><thead><tr>
+        <th>Event</th><th>Venue</th><th>Start</th><th>End</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <!-- PROPOSALS -->
+  <section id="tab-proposals" class="tab hidden">
+    <h1>Event proposals</h1>
+    <div class="grid">
+      <form class="card" id="proposal-form">
+        <h2>New proposal</h2>
+        <label>Title<input name="title" required minlength="3" maxlength="150"></label>
+        <label>Description<textarea name="description" rows="3"></textarea></label>
+        <label>Target audience (major)<input name="target_audience" required placeholder="Computer Engineering"></label>
+        <label>Organization<select name="organization_id" required data-source="organizations"></select></label>
+        <label>Submitted by<select name="submitter_id" required data-source="leaders"></select></label>
+        <label>Initial status<select name="status"><option>Draft</option><option>Submitted</option></select></label>
+        <button type="submit">Create proposal</button>
+      </form>
+      <div class="card wide">
+        <div class="row-between">
+          <h2>Proposals</h2>
+          <select id="proposal-filter">
+            <option value="">All statuses</option><option>Draft</option><option>Submitted</option>
+            <option>Under_Review</option><option>Approved</option><option>Rejected</option><option>Canceled</option>
+          </select>
+        </div>
+        <table id="proposals-table"><thead><tr>
+          <th>#</th><th>Title</th><th>Audience</th><th>Organization</th><th>Status</th><th>Next step</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <dialog id="status-dialog">
+      <form method="dialog" id="status-form">
+        <h2 id="status-title">Change status</h2>
+        <input type="hidden" name="proposal_id">
+        <label>New status<select name="status"></select></label>
+        <label>Reviewer<select name="reviewer_id" data-source="reviewers"><option value="">—</option></select></label>
+        <label>Comments<textarea name="comments" rows="3"></textarea></label>
+        <div class="row-end">
+          <button value="cancel" formnovalidate class="secondary">Close</button>
+          <button value="ok">Save</button>
+        </div>
+      </form>
+    </dialog>
+  </section>
+
+  <!-- RESERVATIONS -->
+  <section id="tab-reservations" class="tab hidden">
+    <h1>Reservations</h1>
+    <div class="grid">
+      <form class="card" id="reservation-form">
+        <h2>Reserve a venue</h2>
+        <p class="muted">Only approved proposals can reserve. Double bookings are blocked by the database (FR-02).</p>
+        <label>Approved event<select name="event_id" required data-source="approved"></select></label>
+        <label>Venue<select name="venue_id" required data-source="venues"></select></label>
+        <label>Start<input type="datetime-local" name="start_time" required></label>
+        <label>End<input type="datetime-local" name="end_time" required></label>
+        <button type="submit">Reserve</button>
+      </form>
+      <div class="card wide">
+        <h2>All reservations</h2>
+        <table id="reservations-table"><thead><tr>
+          <th>#</th><th>Event</th><th>Venue</th><th>Start</th><th>End</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- VENUES -->
+  <section id="tab-venues" class="tab hidden">
+    <h1>Venues</h1>
+    <div class="grid">
+      <form class="card" id="venue-form">
+        <h2>New venue</h2>
+        <label>Name<input name="name" required></label>
+        <label>Building<input name="building" required></label>
+        <label>Capacity<input name="capacity" type="number" min="1" required></label>
+        <label>Built-in equipment<input name="built_in_equipment" placeholder="Projector, sound system"></label>
+        <button type="submit">Add venue</button>
+      </form>
+      <div class="card wide">
+        <h2>Campus venues</h2>
+        <table id="venues-table"><thead><tr>
+          <th>#</th><th>Name</th><th>Building</th><th>Capacity</th><th>Built-in equipment</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORGANIZATIONS -->
+  <section id="tab-organizations" class="tab hidden">
+    <h1>Organizations</h1>
+    <div class="grid">
+      <form class="card" id="organization-form">
+        <h2>New organization</h2>
+        <label>Name<input name="name" required></label>
+        <label>Category<select name="category">
+          <option>Academic</option><option>Cultural</option><option>Sports</option><option>Technology</option><option>Social</option>
+        </select></label>
+        <button type="submit">Add organization</button>
+      </form>
+      <div class="card wide">
+        <h2>Student clubs and chapters</h2>
+        <table id="organizations-table"><thead><tr>
+          <th>#</th><th>Name</th><th>Category</th><th>Created</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>YES v0.5 · FastAPI + SQLAlchemy + SQLite · <a href="/docs" target="_blank">API docs</a></footer>
+<script src="/static/app.js"></script>
+</body>
+</html>
